@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<style>
+.reservation_id_div{
+    text-align: center;
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 800px;
+    height: 100px;
+    margin: auto;
+}
+</style>
+
+<div class='reservation_id_div'>
+    <h1>Your Reservation Id is ( {{ReservationID}} )</h4>
+    <h3>Save it so you can edit or delete your Reservation with it</h5>
+</div>
+
+{% endblock %}

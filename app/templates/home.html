@@ -1,0 +1,231 @@
+{%extends "layout.html" %}
+{% block home %}
+<head>
+        <link type='text/css' href="{{url_for('static', filename='creative.css')}}" rel="stylesheet">
+
+        <style>
+        span{
+            color: #a87900;
+        }
+        .room .text span.price {
+              font-size: 26px;
+              color: #000000;
+              position: relative; }
+        .room .text span.price:after {
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: 2px;
+                content: '';
+                background: #d1ba90; }
+        .room .text span.per {
+                color: #b3b3b3; }
+        .home{
+            height:100vh;
+            background-image: url('../static/background_img/background-home.jpg');
+            background-size: cover;
+        }
+        
+        </style>
+
+</head>
+
+
+
+<header class='home'>
+    <div class="container h-100">
+      <div class="row h-100 align-items-center justify-content-center text-center">
+        <div class="col-lg-10 align-self-end">
+          <h1 style="font-size: 55px; color:white;" class=" text-grey font-weight-bold">Relax Your Mind</h1>
+          <hr class="divider my-4">
+        </div>
+        <div class="col-lg-8 align-self-baseline">
+          <p style="color: whitesmoke;" class="text-white-800 mb-5">Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi facere, soluta magnam consectetur molestias.</p>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" href="{{ url_for('reservation') }}">BOOK NOW</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  
+  <div style='margin: 3% 0%;'  class='row col-md-12 justify-content-center'>
+
+      <div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+          <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-2.jpg') }}">
+          <div class="text p-3 text-center">
+              <h3 class="mb-3"><a href="rooms-single.html">Family Room</a></h3>
+              <p><span class="price mr-2">$20.00</span> <span class="per">per night</span></p>
+              <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+                  <li><span>Size:</span> 45 m2</li>
+                  <li><span>View:</span> Sea View</li>
+                  <li><span>Bed:</span> 1</li>
+              </ul>
+              <h5 style='color: #DC143C; text-transform: capitalize;'>{{rooms[1].number}} Rooms Available!</h5>
+              <hr>
+              {% if rooms[1].number != 0 %}
+                <a href="{{ url_for('reservation', room='family') }}" class="btn btn-primary">Book Now</a>
+              {% else %}
+                <a class="btn btn-disabled">Not Available</a>
+              {% endif %}
+          </div>
+    </div>
+
+
+    <div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+        <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-1.jpg') }}">
+    <div class="text p-3 text-center">
+        <h3 class="mb-3"><a href="rooms-single.html">Suite Room</a></h3>
+        <p><span class="price mr-2">$120.00</span> <span class="per">per night</span></p>
+        <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+            <li><span>Size:</span> 45 m2</li>
+            <li><span>View:</span> Sea View</li>
+            <li><span>Bed:</span> 1</li>
+        </ul>
+        <h5 style='color: #DC143C; text-transform:capitalize;'>{{rooms[0].number}} Rooms Available!</h5>
+        <hr>
+        {% if rooms[0].number != 0 %}
+          <a href="{{ url_for('reservation', room='suite') }}" class="btn btn-primary">Book Now</a>
+        {% else %}
+          <a class="btn btn-disabled">Not Available</a>
+        {% endif %}
+    </div>
+  </div>
+
+
+  <div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+      <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-4.jpg') }}">
+                  <div class="text p-3 text-center">
+                      <h3 class="mb-3"><a href="rooms-single.html">Classic Room</a></h3>
+                      <p><span class="price mr-2">$130.00</span> <span class="per">per night</span></p>
+                      <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+                          <li><span>Size:</span> 45 m2</li>
+                          <li><span>View:</span> Sea View</li>
+                          <li><span>Bed:</span> 1</li>
+                      </ul>
+                      <h5 style='color: #DC143C; text-transform: capitalize;'>{{rooms[3].number}} Rooms Available!</h5>
+                      <hr>
+                      {% if rooms[3].number != 0 %}
+                        <a href="{{ url_for('reservation', room='classic') }}" class="btn btn-primary">Book Now</a>
+                      {% else %}
+                        <a class="btn btn-disabled">Not Available</a>
+                      {% endif %}
+                  </div>
+  </div>
+
+
+      <div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+              <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-3.jpg') }}">
+      <div class="text p-3 text-center">
+          <h3 class="mb-3"><a href="rooms-single.html">Deluxe Room</a></h3>
+          <p><span class="price mr-2">$150.00</span> <span class="per">per night</span></p>
+          <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+              <li><span>Size:</span> 45 m2</li>
+              <li><span>View:</span> Sea View</li>
+              <li><span>Bed:</span> 1</li>
+          </ul>
+          <h5 style='color: #DC143C; text-transform: capitalize;'>{{rooms[2].number}} Rooms Available!</h5>
+          <hr>
+          {% if rooms[2].number != 0 %}
+            <a href="{{ url_for('reservation', room='deluxe') }}" class="btn btn-primary">Book Now</a>
+          {% else %}
+            <a class="btn btn-disabled">Not Available</a>
+          {% endif %}
+      </div>
+</div>
+
+
+<div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+    <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-5.jpg') }}">
+                <div class="text p-3 text-center">
+                    <h3 class="mb-3"><a href="rooms-single.html">Superior Room</a></h3>
+                    <p><span class="price mr-2">$300.00</span> <span class="per">per night</span></p>
+                    <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+                        <li><span>Size:</span> 45 m2</li>
+                        <li><span>View:</span> Sea View</li>
+                        <li><span>Bed:</span> 1</li>
+                    </ul>
+                    <h5 style='color: #DC143C; text-transform: capitalize;'>{{rooms[4].number}} Rooms Available!</h5>
+                    <hr>
+                    {% if rooms[4].number != 0 %}
+                      <a href="{{ url_for('reservation', room='superior') }}" class="btn btn-primary">Book Now</a>
+                    {% else %}
+                      <a class="btn btn-disabled">Not Available</a>
+                    {% endif %}
+                </div>
+</div>
+
+
+<div class="card col-md-3" style="height:100%;padding:10px;margin:10px;border: solid thin blanchedalmond">
+    <img style="height: 200px; width: 100%;" class="img" src="{{ url_for('static', filename='home_img/room-6.jpg') }}">
+                <div class="text p-3 text-center">
+                    <h3 class="mb-3"><a href="rooms-single.html">Luxury Room</a></h3>
+                    <p><span class="price mr-2">$500.00</span> <span class="per">per night</span></p>
+                    <ul style="margin-right: 12%;margin-bottom: 2%; list-style-type: none;" class="list">
+                        <li><span>Size:</span> 45 m2</li>
+                        <li><span>View:</span> Sea View</li>
+                        <li><span>Bed:</span> 1</li>
+                    </ul>
+                    <h5 style='color: #DC143C; text-transform: capitalize;'>{{rooms[5].number}} Rooms Available!</h5>
+                    <hr>
+                    {% if rooms[5].number != 0 %}
+                      <a href="{{ url_for('reservation', room='luxury') }}" class="btn btn-primary">Book Now</a>
+                    {% else %}
+                      <a class="btn btn-disabled">Not Available</a>
+                    {% endif %}
+                </div>
+</div>
+
+
+
+
+</div>
+  <!-- Services Section -->
+  <section class="page-section" id="services">
+    <div class="container">
+      <h2 class="text-center mt-0">At Your Service</h2>
+      <hr class="divider my-4">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="mt-5">
+            <i class="fas fa-4x fa-gem text-primary mb-4"></i>
+            <h3 class="h4 mb-2">Online Room Booking</h3>
+            <p class="text-muted mb-0">Fusce dignissim lorem quis mauris varius venenatis.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="mt-5">
+            <i class="fas fa-4x fa-laptop-code text-primary mb-4"></i>
+            <h3 class="h4 mb-2">Experience Staffs</h3>
+            <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="mt-5">
+            <i class="fas fa-4x fa-globe text-primary mb-4"></i>
+            <h3 class="h4 mb-2">Car Rentals Service</h3>
+            <p class="text-muted mb-0">Fusce dignissim lorem quis mauris varius venenatis.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="mt-5">
+            <i class="fas fa-4x fa-heart text-primary mb-4"></i>
+            <h3 class="h4 mb-2">Delicious Foods</h3>
+            <p class="text-muted mb-0">Is it really good if it's not made with love?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- Footer -->
+  <footer  class="bg-dark py-5">
+    <div class="container">
+      <div class="small text-center text-muted"><span style="color: white;"> Copyright &copy; 2019 - Hoodini</span></div>
+    </div>
+  </footer>
+{% endblock %}
+

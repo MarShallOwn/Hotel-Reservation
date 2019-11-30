@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class='row'>
+<table class="table col-md-12">
+  <tr>
+
+      <th>
+          Name
+      </th>
+      <th>
+          E-mail
+      </th>
+      <th>
+          Check In
+      </th>
+      <th>
+          Check Out
+      </th>
+      <th></th>
+  </tr>
+
+{% for guest in reservations %}
+  <tr>
+      <td>
+          <p>{{guest.name}}</p>
+      </td>
+      <td>
+          <p>{{guest.email}}</p>
+      </td>
+      <td>
+          <p>{{guest.checkin}}</p>
+      </td> 
+      <td>
+            <p>{{guest.checkout}}</p>
+        </td> 
+      <td>
+        <a href="{{ url_for('reservation_show', guest_id=guest.id) }}">Details</a> |
+        <a href="{{ url_for('update_reservation', guest_id=guest.id) }}">Edit</a> |
+        <a href="{{ url_for('delete_reservation', guest_id=guest.id) }}">Delete</a>
+      </td>
+  </tr>
+
+  
+{% endfor %}
+
+</table>
+
+</div>
+{% endblock content %}

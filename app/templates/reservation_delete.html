@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<style>
+
+@media screen and (min-width: 1024px){
+    .border-split{
+        padding-left: 5%; 
+        border-left: 1px solid black;
+    }
+}
+</style>
+
+<article style="padding: 5px 0px; height: 550px; margin:12px; width:100%; display:inline-block" class="col-md-7 media content-section">    
+<div style='margin-left:5px;' class="media-body">
+    <div class="article-metadata">
+    <h2 style='color:deepskyblue'>{{ guest.name }}</h2> 
+    </div>
+    <div class="row">
+            <div class="col-md-6">
+                <p></p>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">E-mail:</label>
+                    <p class="article-content">{{ guest.email }}</p>
+                </div>
+                
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">National ID:</label>
+                    <p class="article-content">{{ guest.NationalID }}</p>
+                </div>
+
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Gender:</label>
+                    <p class="article-content">{{ guest.gender }}</p>
+                </div>
+
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Birth Date:</label>
+                    <p class="article-content">{{ guest.birthdate }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 border-split">
+                <p></p>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">check In:</label>
+                    <p class="article-content">{{ guest.checkin }}</p>
+                </div>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Check Out:</label>
+                    <p class="article-content">{{ guest.checkout }}</p>
+                </div>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Room:</label>
+                    <p class="article-content">{{ guest.room }}</p>
+                </div>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Adults:</label>
+                    <p class="article-content">{{ guest.adults }}</p>
+                </div>
+                <div class='form-group row col-md-12'>
+                    <label style="font-weight: 800; margin: 0 7px;">Children:</label>
+                    <p class="article-content">{{ guest.children }}</p>
+                </div>
+            </div>
+          </div>
+          <br>
+    <h4 style="margin-left: 3%">You Sure you want to delete this reservation ?</h4>
+    <br>
+    <form class='col-md-12' action="{{ url_for('confirm_delete_reservation', guest_id = guest.id) }}" method="POST">
+            <input class="col-md-12 btn btn-danger" type="submit" value="Delete">
+          </form>
+    <div style="margin-top: 10px;" class='col-md-12'>
+            <a href="{{ url_for('reservation_list') }}"> <input class="col-md-12 btn btn-secondary" type="submit" value="Cancel"> </a>
+    </div>
+     
+</div>
+</article>
+{% endblock %}
