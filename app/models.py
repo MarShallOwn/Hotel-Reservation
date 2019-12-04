@@ -28,7 +28,6 @@ class Reservation(db.Model):
     name = db.Column(db.String(100),nullable=False)
     email = db.Column(db.String(120), nullable=False)
     NationalID = db.Column(db.Integer)
-    ReservationID = db.Column(db.String(100), nullable=False,unique = True)
     room = db.Column(db.String(10),nullable=False)
     adults = db.Column(db.String(10),nullable=False)
     children = db.Column(db.String(10),nullable=False)

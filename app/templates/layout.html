@@ -60,7 +60,6 @@
                         <a class="nav-item nav-link" href="{{url_for('home')}}">Home</a>
                         
                         <a class="nav-item nav-link" href="{{url_for('reservation')}}">Reservation</a>
-                        <a class="nav-item nav-link" href="{{url_for('Reservation_login')}}">Reservation Check</a>
                         {% if current_user.is_authenticated and current_user.role == 'Admin' %}
                         <a class="nav-item nav-link" href="{{url_for('reservation_list')}}">Reservation List</a>
                         {% endif %}

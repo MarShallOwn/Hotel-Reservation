@@ -70,6 +70,7 @@ def save_profile_picture(form_picture):
 @login_required
 def account():
     form = UpdateAccountForm()
+    reservations = Reservation.query.filter_by(user_id = current_user.id)
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_profile_picture(form.picture.data)
@@ -83,7 +84,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/'+ current_user.image_file)
-    return render_template('account.html',title='account', image_file=image_file, form=form)
+    return render_template('account.html',title='account', image_file=image_file, form=form, reservations=reservations)
 
 def male_or_female(ID):
     strID = str(ID)
@@ -129,9 +130,7 @@ def reservation(room = None):
         if form.NationalID.data:
             gender = male_or_female(int(form.NationalID.data))
             dateID = Date_from_ID(int(form.NationalID.data))
-        ReservationID = ''.join([choice(ascii_letters 
-            + digits) for n in range(10)])
-        reserve = Reservation(name=form.name.data, email=form.email.data, ReservationID=ReservationID, room=form.room.data, adults=form.adults.data, children=form.children.data, checkin=form.checkin.data, checkout=form.checkout.data, user=current_user)
+        reserve = Reservation(name=form.name.data, email=form.email.data, room=form.room.data, adults=form.adults.data, children=form.children.data, checkin=form.checkin.data, checkout=form.checkout.data, user=current_user)
         if form.NationalID.data:
             reserve.gender = male_or_female(int(form.NationalID.data))
             reserve.birthdate = Date_from_ID(int(form.NationalID.data))
@@ -140,18 +139,13 @@ def reservation(room = None):
         db.session.add(reserve)
         db.session.commit()
         flash('Your Reservation is Succesfull','success')
-        return redirect(url_for('reservation_success', reservation_id = ReservationID))
+        return redirect(url_for('home'))
     elif request.method == 'GET' and current_user.is_authenticated :
         form.name.data = current_user.username
         form.email.data = current_user.email
     if room:
         form.room.data = room
     return render_template('reservation.html', form=form)
-
-@app.route('/reservation_success/<reservation_id>')
-@login_required
-def reservation_success(reservation_id):
-    return render_template('ReservationSuc.html', ReservationID=reservation_id)
 
 @app.route('/reservation_list')
 @login_required
@@ -188,8 +182,8 @@ def delete_reservation(guest_id):
 
 @app.route('/reservation/<int:guest_id>/confirm_delete', methods=['POST'])
 def confirm_delete_reservation(guest_id):
-    if current_user.role == 'Admin':
-        guest = Reservation.query.get_or_404(guest_id)
+    guest = Reservation.query.get_or_404(guest_id)
+    if current_user.role == 'Admin' or current_user == guest.user:
         room = Room.query.filter_by(rname=guest.room).first()
         room.number += 1
         db.session.delete(guest)
