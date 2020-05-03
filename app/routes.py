@@ -1,12 +1,9 @@
 import os
 import secrets
-from random import choice
-from string import ascii_letters, digits
-from PIL import Image
 from datetime import date
-from flask import render_template, url_for, flash, redirect, request, abort
+from flask import render_template, url_for, flash, redirect, request
 from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, ReservationForm, ReservationLoginForm
+from app.forms import RegistrationForm, LoginForm, UpdateAccountForm, ReservationForm
 from app.models import User, Reservation, Room
 from flask_login import login_user, current_user, logout_user, login_required
 
