@@ -113,7 +113,7 @@ def Date_from_ID(ID):
 
 def getavailable():
     choices=[ ('suite', 'Suite'), ('family', 'Family'), ('deluxe', 'Deluxe'), ('classic', 'Classic'), ('superior', 'Superior'), ('luxury', 'Luxury') ]
-    rooms = Room.query.order_by(Room.id.desc()).filter_by(number = 0).all()
+    rooms = Room.query.filter_by(number = 0).all()
     for room in rooms:
         del choices[room.id-1]
     return choices
@@ -127,9 +127,6 @@ def reservation(room = None):
     form.room.choices = getavailable()
     if form.validate_on_submit():
         room = Room.query.filter_by(rname=form.room.data).first()
-        if form.NationalID.data:
-            gender = male_or_female(int(form.NationalID.data))
-            dateID = Date_from_ID(int(form.NationalID.data))
         reserve = Reservation(name=form.name.data, email=form.email.data, room=form.room.data, adults=form.adults.data, children=form.children.data, checkin=form.checkin.data, checkout=form.checkout.data, user=current_user)
         if form.NationalID.data:
             reserve.gender = male_or_female(int(form.NationalID.data))
@@ -189,7 +186,10 @@ def confirm_delete_reservation(guest_id):
         db.session.delete(guest)
         db.session.commit()
         flash('Reservation has been deleted!', 'success')
-        return redirect(url_for('reservation_list'))
+        if current_user.role == "Admin":
+            return redirect(url_for('reservation_list'))
+        else:
+            return redirect(url_for('home'))
     else:
         flash('You need to be admin to view this page.','danger')
         return redirect(url_for('home'))
@@ -209,12 +209,12 @@ def update_reservation(guest_id):
             guest.checkin = form.checkin.data
             guest.checkout = form.checkout.data
             guest.adults = form.adults.data
+            guest.children = form.children.data
             if guest.room != form.room.data:
                 room.number += 1
                 guest.room = form.room.data
                 room = Room.query.filter_by(rname=form.room.data).first()
                 room.number -= 1
-            guest.children = form.children.data
             if form.NationalID.data:
                 guest.NationalID = int(form.NationalID.data)
                 guest.gender = male_or_female(int(form.NationalID.data))
@@ -225,7 +225,10 @@ def update_reservation(guest_id):
                 guest.birthdate = None
             db.session.commit()
             flash('Reservation has been Updated!','success')
-            return redirect(url_for('reservation_list'))
+            if current_user.role == 'Admin':
+                return redirect(url_for('reservation_list'))
+            else:
+                return redirect(url_for('home'))
         elif request.method == 'GET':
             form.name.data = guest.name
             form.email.data = guest.email
@@ -240,196 +243,3 @@ def update_reservation(guest_id):
     else:
         flash('You need to be admin to view this page.','danger')
         return redirect(url_for('home'))
-
-
-@app.route("/user/reservation/Login", methods=['GET', 'POST'])
-@login_required
-def Reservation_login():
-    form = ReservationLoginForm()
-    if form.validate_on_submit():
-        reservation = Reservation.query.filter_by(ReservationID=str(form.ReservationID.data)).first()
-        if  current_user == reservation.user and reservation.ReservationID == form.ReservationID.data:
-            return redirect(url_for('reservation_user_show', reservation_id=reservation.ReservationID))
-        else:
-            flash('Login Unsuccessful. Please check Reservation ID', 'danger')
-    return render_template('user_reservation_login.html',title='Reservation Login', form=form)
-
-
-@app.route('/reservation/<reservation_id>/show')
-@login_required
-def reservation_user_show(reservation_id):
-    guest = Reservation.query.filter_by(ReservationID=reservation_id).first()
-    return render_template('reservation_user_details.html', title='Details', guest=guest)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""" @app.route('/products')
-def products():
-    products = Product.query.all()
-    return render_template('Rooms.html', products=products)
-
-@app.route("/post/new", methods=['GET','POST'])
-@login_required
-def new_post():
-    form = PostForm()
-    if form.validate_on_submit():
-        post = Post(title=form.title.data, content= form.content.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your Post has been created!', 'success')
-        return redirect(url_for('home'))
-    return render_template('create_post.html', title='New Post', form=form)
-
-
-@app.route("/post/<int:post_id>") # making a variable in route
-def post(post_id):
-    post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
-
-
-@app.route("/post/<int:post_id>/update", methods=['GET','POST'])
-@login_required
-def update_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.author != current_user:
-        abort(403)
-    form = PostForm()
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-        db.session.commit()
-        flash('Your post has been updated!', 'success')
-        return redirect(url_for('post', post_id=post.id))
-    elif request.method == 'GET':
-        form.title.data = post.title
-        form.content.data = post.content
-    return render_template('create_post.html', title='Update Post', form=form)
-    
-@app.route("/post/<int:post_id>/delete", methods=['POST'])
-@login_required
-def delete_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    if post.author != current_user:
-        abort(403)
-    db.session.delete(post)
-    db.session.commit()
-    flash('Your post has been deleted!', 'success')
-    return redirect( url_for('post_show') )
-
-
-@app.route("/user/<string:username>")
-def user_posts(username):
-    page = request.args.get('page', 1, type=int)
-    user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
-        .paginate(page = page, per_page = 5)
-    return render_template('user_posts.html', posts=posts, user=user)
-
-
-@app.route("/productlist")
-def product_list():
-    products = Product.query.all()
-    return render_template('product_list.html',products=products)
-
-
-
-
-def save_product_picture(product_image):
-    random_hex = secrets.token_hex(8)
-    _, i_ext = os.path.splitext(product_image.filename)
-    product_hex_name = random_hex + i_ext
-    image_path = os.path.join(app.root_path, 'static/product_pics', product_hex_name)
-
-    product_image.save(image_path)
-
-    return product_hex_name
-
-
-
-@app.route('/product/new', methods=['GET','POST'])
-def new_product():
-    form = ProductForm()
-    if form.validate_on_submit():
-        product = Product(name=form.name.data, description=form.description.data, price=form.price.data)
-        if form.image.data:
-            image_file = save_product_picture(form.image.data)
-            product.image = image_file
-        db.session.add(product)
-        db.session.commit()
-        flash('Your Product has been created!', 'success')
-        return redirect(url_for('product_list'))
-    return render_template('create_product.html', title="Product",form=form)
-
-
-@app.route('/product/<int:product_id>/update', methods=['GET', 'POST'])
-def update_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    form = ProductForm()
-    if form.validate_on_submit():
-        product.name = form.name.data
-        product.price = form.price.data
-        product.description = form.description.data
-        if form.image.data:
-            image_file = save_product_picture(form.image.data)
-            product.image = image_file
-        db.session.commit()
-        flash('Your Product has been Updated!','success')
-        return redirect(url_for('product_list'))
-    elif request.method == 'GET':
-        form.name.data = product.name
-        form.description.data = product.description
-        form.price.data = product.price
-    return render_template('create_product.html', title='Product',form=form)
-
-
-@app.route('/product/<int:product_id>/delete')
-def delete_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    return render_template('product_delete.html', product=product)
-    
-
-@app.route('/product/<int:product_id>/confirm_delete', methods=['POST'])
-def confirm_delete_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    db.session.delete(product)
-    db.session.commit()
-    flash('Your Product has been deleted!', 'success')
-    return redirect(url_for('product_list'))
-
-
-@app.route('/post/show')
-def post_show():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page = page, per_page = 5)
-    return render_template('posts_list.html', posts=posts)
- """

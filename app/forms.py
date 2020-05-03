@@ -96,26 +96,3 @@ class ReservationLoginForm(FlaskForm):
     ReservationID = StringField('Reservation ID', validators=[DataRequired(), Length(min=10, max=10) ])
     submit = SubmitField('Check Reservation')
 
-
-
-
-
-
-
-""" 
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
-
-class ProductForm(FlaskForm):
-    name = StringField('Product Name', validators=[DataRequired()])
-    description = StringField('Description')
-    price = StringField('Price', validators=[DataRequired()])
-    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'jfif'])])
-    submit = SubmitField('Submit')
-
-    def validate_name(self, name):
-            product = Product.query.filter_by(name = name.data).first()
-            if product and str(request.url_rule) != '/product/<int:product_id>/update':
-                raise ValidationError('That name is taken. Please choose a different one.') """
