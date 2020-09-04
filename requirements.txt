@@ -35,7 +35,6 @@ mysql==0.0.2
 mysql-connector-python==8.0.17
 mysqlclient==1.4.6
 Naked==0.1.31
-Pillow==6.2.0
 pip-autoremove==0.9.1
 psycopg2==2.8.5
 pycparser==2.20
