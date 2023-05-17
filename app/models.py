@@ -1,6 +1,9 @@
+import os
 from datetime import datetime
-from app import db, login_manager
+
+from app import db, login_manager, bcrypt
 from flask_login import UserMixin
+from sqlalchemy import event
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -19,6 +22,13 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rname = db.Column(db.String(50), unique=True)
+    number = db.Column(db.Integer, nullable = False)
+
+    def __repr__(self):
+        return f"User('{self.rname}', '{self.number}')"
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,13 +48,17 @@ class Reservation(db.Model):
     def __repr__(self):
         return f"Reservation('{self.name}', '{self.email}', '{self.room}', '{self.adults}', '{self.children}', '{self.checkin}', '{self.checkout}', '{self.date_posted}')"
 
+@event.listens_for(User.__table__, 'after_create')
+def create_admin(*args, **kwargs):
+    adminUsername = os.environ.get('ADMIN_USER_USERNAME')
+    adminEmail = os.environ.get('ADMIN_USER_EMAIL')
+    adminPassword = os.environ.get('ADMIN_USER_PASSWORD')
+    hashed_password = bcrypt.generate_password_hash(adminPassword).decode('utf-8')
+    db.session.add(User(username=adminUsername, email= adminEmail, password= hashed_password, role="Admin"))
+    db.session.commit()
 
-
-
-class Room(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    rname = db.Column(db.String(10), unique=True)
-    number = db.Column(db.Integer, nullable = False)
-
-    def __repr__(self):
-        return f"User('{self.rname}', '{self.number}')"
+@event.listens_for(Room.__table__, 'after_create')
+def create_rooms(*args, **kwargs):
+    rooms = [Room(rname= "suite", number= 4), Room(rname= "family", number= 6), Room(rname= "deluxe", number= 4), Room(rname= "classic", number= 4), Room(rname= "superior", number= 3), Room(rname= "luxury", number= 3)]
+    db.session.add_all(rooms)
+    db.session.commit()

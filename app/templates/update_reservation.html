@@ -116,6 +116,11 @@
                 </div>
         </fieldset>
         <div class="form-group">
+            <a class="link-btn" href="{{ url_for('reservation_list') }}">
+                <button type="button" style="cursor: pointer" class="btn btn-secondary">
+                    Cancel    
+                </button>
+            </a>
                 {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>

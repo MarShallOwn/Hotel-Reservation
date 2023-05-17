@@ -1,0 +1,11 @@
+version: '3'
+services:
+  hotel-reservation-app:
+    image: hotel-reservation-app:1.0
+    ports:
+      - 5000:5000
+    volumes:
+      - hotel-reservation-code:/usr/src/app
+volumes:
+  hotel-reservation-code:
+    driver: local

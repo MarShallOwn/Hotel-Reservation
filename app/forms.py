@@ -1,14 +1,10 @@
-from datetime import datetime
-from flask import request
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField, IntegerField
-from wtforms.fields.html5 import DateField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms.fields import DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from app.models import User, Reservation, Room
-
-
+from app.models import User, Room
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',

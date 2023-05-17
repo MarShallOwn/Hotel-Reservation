@@ -137,6 +137,8 @@ def reservation(room = None):
     elif request.method == 'GET' and current_user.is_authenticated :
         form.name.data = current_user.username
         form.email.data = current_user.email
+        form.checkin.data = date.today()
+        form.checkout.data = date.today()
     if room:
         form.room.data = room
     return render_template('reservation.html', form=form)

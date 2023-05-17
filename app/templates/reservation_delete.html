@@ -64,13 +64,13 @@
             </div>
           </div>
           <br>
-    <h4 style="margin-left: 3%">You Sure you want to delete this reservation ?</h4>
+    <h4 style="margin-left: 3%">You sure you want to delete this reservation ?</h4>
     <br>
     <form class='col-md-12' action="{{ url_for('confirm_delete_reservation', guest_id = guest.id) }}" method="POST">
             <input class="col-md-12 btn btn-danger" type="submit" value="Delete">
           </form>
     <div style="margin-top: 10px;" class='col-md-12'>
-            <a href="{{ url_for('reservation_list') }}"> <input class="col-md-12 btn btn-secondary" type="submit" value="Cancel"> </a>
+            <a href="{{ url_for('reservation_list') }}"> <input style="cursor: pointer" class="col-md-12 btn btn-secondary" value="Cancel"> </a>
     </div>
      
 </div>
